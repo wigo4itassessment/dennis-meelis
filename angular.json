@@ -5,7 +5,7 @@
       "projectType": "application",
       "root": "apps/yakshop",
       "sourceRoot": "apps/yakshop/src",
-      "prefix": "dennis-meelis",
+      "prefix": "yakshop",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",

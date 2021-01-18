@@ -6,13 +6,27 @@ import {
 } from './herd.mock';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LoadController } from './load.controller';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { LabYakEntity } from '../yak/lab-yak.entity';
 
 describe('LoadController', () => {
   let controller: LoadController;
+  let mockRepository;
 
   beforeEach(async () => {
+    mockRepository = {
+      clear: jest.fn(() => Promise.resolve()),
+      save: jest.fn(() => Promise.resolve()),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [LoadController],
+      providers: [
+        {
+          provide: getRepositoryToken(LabYakEntity),
+          useValue: mockRepository,
+        },
+      ],
     }).compile();
 
     controller = module.get<LoadController>(LoadController);
@@ -22,28 +36,40 @@ describe('LoadController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should load the herd', () => {
-    expect(() => controller.loadHerd(herd)).not.toThrowError();
+  it('should load the herd', async () => {
+    await expect(controller.loadHerd(herd)).resolves.not.toThrowError();
+    expect(mockRepository.clear).toHaveBeenCalledTimes(1);
+    expect(mockRepository.save).toHaveBeenCalledTimes(1);
+    expect(mockRepository.save).toHaveBeenCalledWith([
+      { age: 4, name: 'Betty-1', sex: 'f' },
+      { age: 8, name: 'Betty-2', sex: 'f' },
+      { age: 9.5, name: 'Betty-3', sex: 'f' },
+    ]);
   });
 
-  it('should validate the posted herd', () => {
-    expect(() =>
+  it('should not process invalid data', async () => {
+    await expect(
       controller.loadHerd(invalidAgeHerd)
-    ).toThrowErrorMatchingInlineSnapshot(
-      `"LabYak Betty-1: age 'x' is not a number"`
+    ).rejects.toMatchInlineSnapshot(
+      `[Error: LabYak Betty-1: age 'x' is not a number]`
     );
-    expect(() =>
-      controller.loadHerd(invalidSexHerd)
-    ).toThrowErrorMatchingInlineSnapshot(
-      `"LabYak Betty-1: sex must be either 'f' or 'm', found 'x'"`
-    );
-    expect(() =>
-      controller.loadHerd(invalidNameHerd)
-    ).toThrowErrorMatchingInlineSnapshot(`"LabYak name is required"`);
 
-    expect(() =>
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      controller.loadHerd({} as any)
-    ).toThrowErrorMatchingInlineSnapshot(`"No labyaks found"`);
+    await expect(
+      controller.loadHerd(invalidSexHerd)
+    ).rejects.toMatchInlineSnapshot(
+      `[Error: LabYak Betty-1: sex must be either 'f' or 'm', found 'x']`
+    );
+
+    await expect(
+      controller.loadHerd(invalidNameHerd)
+    ).rejects.toMatchInlineSnapshot(`[Error: LabYak name is required]`);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await expect(controller.loadHerd({} as any)).rejects.toMatchInlineSnapshot(
+      `[Error: No labyaks found]`
+    );
+
+    expect(mockRepository.clear).not.toHaveBeenCalled();
+    expect(mockRepository.save).not.toHaveBeenCalled();
   });
 });

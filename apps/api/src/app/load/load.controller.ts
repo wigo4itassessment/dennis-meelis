@@ -5,8 +5,11 @@ import {
   InternalServerErrorException,
   Post,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { LabYak } from '@yakshop/api-interfaces';
+import { MongoRepository } from 'typeorm';
 
-import { LabYak } from '@dennis-meelis/api-interfaces';
+import { LabYakEntity } from '../yak/lab-yak.entity';
 
 const parseXmlYak = ({
   $: { name, age, sex },
@@ -27,14 +30,20 @@ const parseXmlYak = ({
       `LabYak ${name}: sex must be either 'f' or 'm', found '${sex}'`
     );
   }
+
   return { name, age: +age, sex };
 };
 
 @Controller('load')
 export class LoadController {
+  constructor(
+    @InjectRepository(LabYakEntity)
+    private readonly labYakRepository: MongoRepository<LabYak>
+  ) {}
+
   @Post()
-  @HttpCode(204)
-  loadHerd(
+  @HttpCode(205)
+  async loadHerd(
     @Body() body: { herd: { labyak: { $: Record<string, string> }[] } }
   ) {
     if (!body?.herd?.labyak?.length) {
@@ -42,6 +51,8 @@ export class LoadController {
     }
 
     const labYaks = body.herd.labyak.map(parseXmlYak);
-    console.log('labYaks', JSON.stringify(labYaks, null, 2));
+
+    await this.labYakRepository.clear();
+    await this.labYakRepository.save(labYaks);
   }
 }
