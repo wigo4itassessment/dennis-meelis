@@ -1,0 +1,41 @@
+@base_url = http://localhost:3333
+
+### Valid request
+POST {{base_url}}/yak-shop/load
+Content-Type: text/xml
+
+<herd>
+  <labyak name="Betty-1" age="4" sex="f"/>
+  <labyak name="Betty-2" age="8" sex="f"/>
+  <labyak name="Betty-3" age="9.5" sex="f"/>
+</herd>
+
+### Tests age validation
+POST {{base_url}}/yak-shop/load
+Content-Type: text/xml
+
+<herd>
+  <labyak name="Betty-1" age="4" sex="f"/>
+  <labyak name="Betty-2" age="x" sex="f"/>
+  <labyak name="Betty-3" age="9.5" sex="f"/>
+</herd>
+
+### Tests sex validation
+POST {{base_url}}/yak-shop/load
+Content-Type: text/xml
+
+<herd>
+  <labyak name="Betty-1" age="4" sex="f"/>
+  <labyak name="Betty-2" age="8" sex="f"/>
+  <labyak name="Betty-3" age="9.5" sex="x"/>
+</herd>
+
+### Tests name validation
+POST {{base_url}}/yak-shop/load
+Content-Type: text/xml
+
+<herd>
+  <labyak name="Betty-1" age="4" sex="f"/>
+  <labyak age="8" sex="f"/>
+  <labyak name="Betty-3" age="9.5" sex="x"/>
+</herd>
