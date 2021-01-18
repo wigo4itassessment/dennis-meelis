@@ -1,98 +1,72 @@
-# DennisMeelis
+# Welcome to the YakShop!
 
-This project was generated using [Nx](https://nx.dev).
+Welcome to the repository of the YakShop, here you will find the source code of the api and SPA applications that make up the YakShop application. The project is created with Nx to manage the monorepo, see the [nx.dev site](https://nx.dev/) for more information.
 
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+For any questions you may have please contact me by e-mail: Dennis Meelis (dmeelis@xebia.com)
 
-🔎 **Nx is a set of Extensible Dev Tools for Monorepos.**
+## Getting started
 
-## Quick Start & Documentation
+---
 
-[Nx Documentation](https://nx.dev/angular)
+### Prerequisites
 
-[10-minute video showing all Nx features](https://nx.dev/angular/getting-started/what-is-nx)
+In order to build and run the YakShop applications you will need to have Node.js installed. It is tested with version 14.15.3, to install the required Node.js package dependencies run the following command in a terminal in the project root:
 
-[Interactive Tutorial](https://nx.dev/angular/tutorial/01-create-application)
+```
+npm install
+```
 
-## Adding capabilities to your workspace
+The API requires a [MongoDB](https://www.mongodb.com/) database to store the state of the herd and the order data. You can run it locally, with Docker or use a cloud based instance. To configure the database for development create a file called `.env` in `/apps/api` and fill it with the following data:
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+```
+MONGODB_URL=[URL to your MongoDB instance]
+MONGODB_DATABASE=[Name of the MongoDB database]
+```
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+### API
 
-Below are our core plugins:
+The REST API is made with [NestJS](https://nestjs.com/) to provide a scalable base for the future!
 
-- [Angular](https://angular.io)
-  - `ng add @nrwl/angular`
-- [React](https://reactjs.org)
-  - `ng add @nrwl/react`
-- Web (no framework frontends)
-  - `ng add @nrwl/web`
-- [Nest](https://nestjs.com)
-  - `ng add @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `ng add @nrwl/express`
-- [Node](https://nodejs.org)
-  - `ng add @nrwl/node`
+To serve the API type the following command in a terminal in the project root:
 
-There are also many [community plugins](https://nx.dev/nx-community) you could add.
+```
+npx nx serve api
+```
 
-## Generate an application
+### Frontend
 
-Run `ng g @nrwl/angular:app my-app` to generate an application.
+The SPA frontend is made with [Angular](https://angular.io/).
 
-> You can use any of the plugins above to generate applications as well.
+To serve the frontend type the following command in a terminal in the project root:
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+```
+npx nx serve yakshop
+```
 
-## Generate a library
+## Quality assurance
 
-Run `ng g @nrwl/angular:lib my-lib` to generate a library.
+The project is setup with linting, unit testing and end-to-end testing to make continuous delivery possible and it keeps the codebase maintainable.
 
-> You can also use any of the plugins above to generate libraries as well.
+Checking code formatting:
 
-Libraries are sharable across libraries and applications. They can be imported from `@yakshop/mylib`.
+```
+nx format:check
+```
 
-## Development server
+Running the linting rules:
 
-Run `ng serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+```
+nx affected:lint --all
+```
 
-## Code scaffolding
+Running the unit tests:
 
-Run `ng g component my-component --project=my-app` to generate a new component.
+```
+nx affected:test --all
+```
 
-## Build
+Running the end-to-end tests:
 
-Run `ng build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev/angular) to learn more.
-
-## ☁ Nx Cloud
-
-### Computation Memoization in the Cloud
-
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+```
+nx affected:e2e --all
+```
