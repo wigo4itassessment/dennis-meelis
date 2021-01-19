@@ -9,6 +9,7 @@ import { LoadController } from './load.controller';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { LabYakEntity } from '../yak/lab-yak.entity';
 import { OrderEntity } from '../order/order.entity';
+import { StockService } from '../stock/stock.service';
 
 describe('LoadController', () => {
   let controller: LoadController;
@@ -30,6 +31,10 @@ describe('LoadController', () => {
         {
           provide: getRepositoryToken(OrderEntity),
           useValue: mockRepository,
+        },
+        {
+          provide: StockService,
+          useValue: { stockChanged: jest.fn() },
         },
       ],
     }).compile();

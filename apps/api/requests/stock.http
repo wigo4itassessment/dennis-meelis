@@ -5,3 +5,6 @@ GET {{base_url}}/yak-shop/stock/0
 
 ### Day 13
 GET {{base_url}}/yak-shop/stock/13
+
+### Updates?
+GET {{base_url}}/yak-shop/stock/updates

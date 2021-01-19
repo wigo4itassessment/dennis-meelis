@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { StockService } from '../stock/stock.service';
 import { LabYakEntity } from '../yak/lab-yak.entity';
 import { mockYakRepository } from '../yak/lab-yak.mocks';
 import { OrderController } from './order.controller';
@@ -26,6 +27,10 @@ describe('OrderController', () => {
         {
           provide: getRepositoryToken(LabYakEntity),
           useValue: mockYakRepository,
+        },
+        {
+          provide: StockService,
+          useValue: { stockChanged: jest.fn() },
         },
       ],
     }).compile();

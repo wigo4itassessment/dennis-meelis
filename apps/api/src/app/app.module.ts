@@ -8,6 +8,7 @@ import { HerdController } from './herd/herd.controller';
 import { OrderController } from './order/order.controller';
 import { OrderEntity } from './order/order.entity';
 import { StockController } from './stock/stock.controller';
+import { StockService } from './stock/stock.service';
 
 @Module({
   imports: [
@@ -30,6 +31,6 @@ import { StockController } from './stock/stock.controller';
     HerdController,
     OrderController,
   ],
-  providers: [],
+  providers: [StockService],
 })
 export class AppModule {}

@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { LabYak, Order } from '@yakshop/api-interfaces';
 import { MongoRepository } from 'typeorm';
 import { OrderEntity } from '../order/order.entity';
+import { StockService } from '../stock/stock.service';
 
 import { LabYakEntity } from '../yak/lab-yak.entity';
 
@@ -41,7 +42,8 @@ export class LoadController {
     @InjectRepository(LabYakEntity)
     private readonly labYakRepository: MongoRepository<LabYak>,
     @InjectRepository(OrderEntity)
-    private orderRepository: MongoRepository<Order>
+    private orderRepository: MongoRepository<Order>,
+    private stockService: StockService
   ) {}
 
   @Post()
@@ -62,5 +64,6 @@ export class LoadController {
     }
     await this.labYakRepository.clear();
     await this.labYakRepository.save(labYaks);
+    this.stockService.stockChanged();
   }
 }

@@ -13,7 +13,10 @@ import { OrderService } from './order.service';
 })
 export class OrderComponent {
   day$ = this.route.params.pipe(map((params) => params.day as number));
-  stock$ = this.day$.pipe(switchMap((day) => this.orderService.getStock(day)));
+  // stock$ = this.day$.pipe(switchMap((day) => this.orderService.getStock(day)));
+  stock$ = this.day$.pipe(
+    switchMap((day) => this.orderService.getStockStream(day))
+  );
   orderData = { customer: '', order: { milk: 0, skins: 0 } } as Order;
   message = '';
 

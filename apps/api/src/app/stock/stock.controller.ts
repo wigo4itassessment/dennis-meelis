@@ -1,42 +1,26 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { LabYak, Order } from '@yakshop/api-interfaces';
-import { MongoRepository } from 'typeorm';
-import { OrderEntity } from '../order/order.entity';
-import { LabYakEntity } from '../yak/lab-yak.entity';
-import { herdProducedOnDay } from '../yak/lab-yak.utils';
+import { Controller, Get, Param, Sse } from '@nestjs/common';
+import { Stock } from '@yakshop/api-interfaces';
+import { map } from 'rxjs/operators';
+import { StockService } from './stock.service';
 
 @Controller('stock')
 export class StockController {
-  constructor(
-    @InjectRepository(OrderEntity)
-    private orderRepository: MongoRepository<Order>,
+  constructor(private stockService: StockService) {}
 
-    @InjectRepository(LabYakEntity)
-    private labYakRepository: MongoRepository<LabYak>
-  ) {}
+  @Sse('updates/:day')
+  updates(@Param('day') day: number) {
+    return this.stockService.stockOnDayStream(day).pipe(
+      map(
+        (stock) =>
+          ({
+            data: stock,
+          } as MessageEvent<Stock>)
+      )
+    );
+  }
 
   @Get(':day')
   async getStockOnDay(@Param('day') day: number) {
-    const yaks = await this.labYakRepository.find();
-    const produced = herdProducedOnDay(yaks, day);
-    const orders = await this.orderRepository.find();
-
-    const stock = {
-      milk: orders
-        .filter((order) => !!order.order.milk)
-        .reduce(
-          (total, { order: { milk: ordered } }) => total - ordered,
-          produced.milk
-        ),
-      skins: orders
-        .filter((order) => !!order.order.skins)
-        .reduce(
-          (total, { order: { skins: ordered } }) => total - ordered,
-          produced.skins
-        ),
-    };
-
-    return stock;
+    return await this.stockService.getStockOnDay(day);
   }
 }

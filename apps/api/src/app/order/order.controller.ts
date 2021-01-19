@@ -1,3 +1,4 @@
+import { StockService } from './../stock/stock.service';
 import {
   Body,
   Controller,
@@ -21,7 +22,9 @@ export class OrderController {
     private orderRepository: MongoRepository<Order>,
 
     @InjectRepository(LabYakEntity)
-    private labYakRepository: MongoRepository<LabYak>
+    private labYakRepository: MongoRepository<LabYak>,
+
+    private stockService: StockService
   ) {}
 
   @Post(':day')
@@ -67,6 +70,7 @@ export class OrderController {
       // Todo: http status 206
     }
 
+    this.stockService.stockChanged();
     return newOrder;
   }
 }
