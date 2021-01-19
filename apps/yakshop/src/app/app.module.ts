@@ -15,7 +15,7 @@ const routes = [
     component: HomeComponent,
   },
   {
-    path: 'order',
+    path: 'order/:day',
     component: OrderComponent,
   },
   {

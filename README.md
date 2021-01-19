@@ -45,7 +45,7 @@ npx nx serve yakshop
 
 ## Quality assurance
 
-The project is setup with linting, unit testing and end-to-end testing to make continuous delivery possible and it keeps the codebase maintainable.
+The project is setup with code formatting, linting and unit testing to make continuous delivery possible and it keeps the codebase maintainable.
 
 Checking code formatting:
 
@@ -53,20 +53,14 @@ Checking code formatting:
 nx format:check
 ```
 
-Running the linting rules:
+Running all the linting rules:
 
 ```
 nx affected:lint --all
 ```
 
-Running the unit tests:
+Running all the unit tests:
 
 ```
 nx affected:test --all
-```
-
-Running the end-to-end tests:
-
-```
-nx affected:e2e --all
 ```
