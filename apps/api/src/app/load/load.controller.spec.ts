@@ -1,9 +1,9 @@
 import {
-  herd,
-  invalidAgeHerd,
-  invalidNameHerd,
-  invalidSexHerd,
-} from './herd.mock';
+  loadHerdBody,
+  invalidAgeLoadHerdBody,
+  invalidNameLoadHerdBody,
+  invalidSexLoadHerdBody,
+} from '../yak/lab-yak.mocks';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LoadController } from './load.controller';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -37,7 +37,7 @@ describe('LoadController', () => {
   });
 
   it('should load the herd', async () => {
-    await expect(controller.loadHerd(herd)).resolves.not.toThrowError();
+    await expect(controller.loadHerd(loadHerdBody)).resolves.not.toThrowError();
     expect(mockRepository.clear).toHaveBeenCalledTimes(1);
     expect(mockRepository.save).toHaveBeenCalledTimes(1);
     expect(mockRepository.save).toHaveBeenCalledWith([
@@ -49,19 +49,19 @@ describe('LoadController', () => {
 
   it('should not process invalid data', async () => {
     await expect(
-      controller.loadHerd(invalidAgeHerd)
+      controller.loadHerd(invalidAgeLoadHerdBody)
     ).rejects.toMatchInlineSnapshot(
       `[Error: LabYak Betty-1: age 'x' is not a number]`
     );
 
     await expect(
-      controller.loadHerd(invalidSexHerd)
+      controller.loadHerd(invalidSexLoadHerdBody)
     ).rejects.toMatchInlineSnapshot(
       `[Error: LabYak Betty-1: sex must be either 'f' or 'm', found 'x']`
     );
 
     await expect(
-      controller.loadHerd(invalidNameHerd)
+      controller.loadHerd(invalidNameLoadHerdBody)
     ).rejects.toMatchInlineSnapshot(`[Error: LabYak name is required]`);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

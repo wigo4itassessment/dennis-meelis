@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { LoadController } from './load/load.controller';
 import { LabYakEntity } from './yak/lab-yak.entity';
+import { StockController } from './stock/stock.controller';
+import { HerdController } from './herd/herd.controller';
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ import { LabYakEntity } from './yak/lab-yak.entity';
     }),
     TypeOrmModule.forFeature([LabYakEntity]),
   ],
-  controllers: [LoadController],
+  controllers: [LoadController, StockController, HerdController],
   providers: [],
 })
 export class AppModule {}

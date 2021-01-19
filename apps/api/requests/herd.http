@@ -1,0 +1,19 @@
+@base_url = http://localhost:3333
+
+### Day 0
+GET {{base_url}}/yak-shop/herd/0
+
+### Day 13
+GET {{base_url}}/yak-shop/herd/13
+
+### Day 50
+GET {{base_url}}/yak-shop/herd/50
+
+### Day 150
+GET {{base_url}}/yak-shop/herd/150
+
+### Day 200
+GET {{base_url}}/yak-shop/herd/200
+
+### Day 600
+GET {{base_url}}/yak-shop/herd/600

@@ -1,0 +1,7 @@
+@base_url = http://localhost:3333
+
+### Day 0
+GET {{base_url}}/yak-shop/stock/0
+
+### Day 13
+GET {{base_url}}/yak-shop/stock/13
