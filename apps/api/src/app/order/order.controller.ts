@@ -1,13 +1,21 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  NotFoundException,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LabYak, Order } from '@yakshop/api-interfaces';
 import { MongoRepository } from 'typeorm';
-import { OrderEntity } from '../order/order.entity';
+
+import { LabYak, Order } from '@yakshop/api-interfaces';
+
+import { OrderEntity } from './order.entity';
 import { LabYakEntity } from '../yak/lab-yak.entity';
 import { herdProducedOnDay } from '../yak/lab-yak.utils';
 
-@Controller('stock')
-export class StockController {
+@Controller('order')
+export class OrderController {
   constructor(
     @InjectRepository(OrderEntity)
     private orderRepository: MongoRepository<Order>,
@@ -16,8 +24,8 @@ export class StockController {
     private labYakRepository: MongoRepository<LabYak>
   ) {}
 
-  @Get(':day')
-  async getStockOnDay(@Param('day') day: number) {
+  @Post(':day')
+  async placeOrder(@Param('day') day: number, @Body() newOrder: Order) {
     const yaks = await this.labYakRepository.find();
     const produced = herdProducedOnDay(yaks, day);
     const orders = await this.orderRepository.find();
@@ -37,6 +45,28 @@ export class StockController {
         ),
     };
 
-    return stock;
+    if (
+      newOrder.order.milk > stock.milk &&
+      newOrder.order.skins > stock.skins
+    ) {
+      throw new NotFoundException();
+    }
+
+    let partialOrder = false;
+    if (newOrder.order.milk > stock.milk) {
+      delete newOrder.order.milk;
+      partialOrder = true;
+    }
+    if (newOrder.order.skins > stock.skins) {
+      delete newOrder.order.skins;
+      partialOrder = true;
+    }
+
+    await this.orderRepository.save(newOrder);
+    if (partialOrder) {
+      console.log('206');
+    }
+
+    return newOrder;
   }
 }

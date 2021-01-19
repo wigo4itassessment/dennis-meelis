@@ -13,3 +13,8 @@ export interface Stock {
   milk?: number;
   skins?: number;
 }
+
+export interface Order {
+  customer: string;
+  order: Stock;
+}

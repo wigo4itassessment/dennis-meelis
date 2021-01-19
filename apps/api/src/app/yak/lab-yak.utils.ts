@@ -19,7 +19,22 @@ export function yakOnDay(yak: LabYak, day: number): LabYak {
   return newYak;
 }
 
-export function producedOnDay({ age, sex }: LabYak, day: number): Stock {
+export function herdProducedOnDay(yaks: LabYak[], day: number) {
+  const produced = yaks.map((yak) => yakProducedOnDay(yak, day));
+  const stock = produced.reduce(
+    (
+      { milk: totalMilk, skins: totalSkins },
+      { milk: stockMilk, skins: stockSkins }
+    ) => ({
+      milk: totalMilk + stockMilk,
+      skins: totalSkins + stockSkins,
+    })
+  );
+
+  return stock;
+}
+
+export function yakProducedOnDay({ age, sex }: LabYak, day: number): Stock {
   const produced = { milk: 0, skins: 0 };
   const ageOnDays = Array.from(
     { length: Math.min(day, MAX_AGE * DAYS_IN_YEAR - 1) },

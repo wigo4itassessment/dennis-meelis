@@ -6,8 +6,9 @@ import {
   Post,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LabYak } from '@yakshop/api-interfaces';
+import { LabYak, Order } from '@yakshop/api-interfaces';
 import { MongoRepository } from 'typeorm';
+import { OrderEntity } from '../order/order.entity';
 
 import { LabYakEntity } from '../yak/lab-yak.entity';
 
@@ -38,7 +39,9 @@ const parseXmlYak = ({
 export class LoadController {
   constructor(
     @InjectRepository(LabYakEntity)
-    private readonly labYakRepository: MongoRepository<LabYak>
+    private readonly labYakRepository: MongoRepository<LabYak>,
+    @InjectRepository(OrderEntity)
+    private orderRepository: MongoRepository<Order>
   ) {}
 
   @Post()
@@ -52,6 +55,11 @@ export class LoadController {
 
     const labYaks = body.herd.labyak.map(parseXmlYak);
 
+    try {
+      await this.orderRepository.clear();
+    } catch (error) {
+      console.log(error);
+    }
     await this.labYakRepository.clear();
     await this.labYakRepository.save(labYaks);
   }

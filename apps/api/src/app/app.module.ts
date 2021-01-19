@@ -4,8 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { LoadController } from './load/load.controller';
 import { LabYakEntity } from './yak/lab-yak.entity';
-import { StockController } from './stock/stock.controller';
 import { HerdController } from './herd/herd.controller';
+import { OrderController } from './order/order.controller';
+import { OrderEntity } from './order/order.entity';
+import { StockController } from './stock/stock.controller';
 
 @Module({
   imports: [
@@ -20,9 +22,14 @@ import { HerdController } from './herd/herd.controller';
       useUnifiedTopology: true,
       useNewUrlParser: true,
     }),
-    TypeOrmModule.forFeature([LabYakEntity]),
+    TypeOrmModule.forFeature([LabYakEntity, OrderEntity]),
   ],
-  controllers: [LoadController, StockController, HerdController],
+  controllers: [
+    LoadController,
+    StockController,
+    HerdController,
+    OrderController,
+  ],
   providers: [],
 })
 export class AppModule {}

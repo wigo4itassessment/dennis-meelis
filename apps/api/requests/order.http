@@ -1,0 +1,38 @@
+@base_url = http://localhost:3333
+
+### Reset
+POST {{base_url}}/yak-shop/load
+Content-Type: text/xml
+
+<herd>
+  <labyak name="Betty-1" age="4" sex="f"/>
+  <labyak name="Betty-2" age="8" sex="f"/>
+  <labyak name="Betty-3" age="9.5" sex="f"/>
+</herd>
+
+### Request 1
+POST {{base_url}}/yak-shop/order/14
+Content-Type: application/json
+
+{
+  "customer": "dennis",
+  "order": {
+    "milk": 1100,
+    "skins": 3
+  }
+}
+
+### Request 2
+POST {{base_url}}/yak-shop/order/14
+Content-Type: application/json
+
+{
+  "customer": "dennis",
+  "order": {
+    "milk": 1200,
+    "skins": 3
+  }
+}
+
+### Day 13
+GET {{base_url}}/yak-shop/stock/14
