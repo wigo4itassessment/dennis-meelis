@@ -8,6 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { OrderComponent } from './order/order.component';
 import { ThanksComponent } from './thanks/thanks.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const routes = [
   {
@@ -31,6 +33,9 @@ const routes = [
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],

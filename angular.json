@@ -18,7 +18,8 @@
             "aot": true,
             "assets": [
               "apps/yakshop/src/favicon.ico",
-              "apps/yakshop/src/assets"
+              "apps/yakshop/src/assets",
+              "apps/yakshop/src/manifest.webmanifest"
             ],
             "styles": ["apps/yakshop/src/styles.scss"],
             "scripts": []
@@ -49,7 +50,9 @@
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "apps/yakshop/ngsw-config.json"
             }
           }
         },
