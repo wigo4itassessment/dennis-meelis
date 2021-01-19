@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ThanksComponent should render 1`] = `
+<yakshop-thanks>
+  <h1>
+    Thank you for placing your order!
+  </h1><p>
+    <button
+      routerlink="/"
+    >
+      Back to home
+    </button>
+  </p>
+</yakshop-thanks>
+`;

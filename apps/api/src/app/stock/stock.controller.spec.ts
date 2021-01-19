@@ -3,18 +3,26 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { LabYakEntity } from '../yak/lab-yak.entity';
 import { StockController } from './stock.controller';
+import { OrderEntity } from '../order/order.entity';
 
 describe('StockController', () => {
   let controller: StockController;
   let mockRepository;
 
   beforeEach(async () => {
-    mockRepository = mockYakRepository;
+    mockRepository = {
+      clear: jest.fn(() => Promise.resolve()),
+      find: jest.fn(() => Promise.resolve([])),
+    };
     const module: TestingModule = await Test.createTestingModule({
       controllers: [StockController],
       providers: [
         {
           provide: getRepositoryToken(LabYakEntity),
+          useValue: mockYakRepository,
+        },
+        {
+          provide: getRepositoryToken(OrderEntity),
           useValue: mockRepository,
         },
       ],

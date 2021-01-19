@@ -1,0 +1,60 @@
+<h1>Order your yak supplies</h1>
+<section *ngIf="stock$ | async as stock">
+  <h2>Current stock</h2>
+  <p>
+    Currently we have {{ stock.milk | number }} litres of milk and
+    {{ stock.skins | number }} pieces of skin in stock
+  </p>
+</section>
+<section class="order">
+  <h2>Your Order</h2>
+  <form #orderForm="ngForm">
+    <div>
+      <label for="name">Your name</label>
+      <input
+        type="text"
+        required
+        id="customer"
+        name="customer"
+        [(ngModel)]="orderData.customer"
+        #customer="ngModel"
+      />
+      <div *ngIf="customer.invalid && (customer.dirty || customer.touched)">
+        <div *ngIf="customer.errors.required">Name is required.</div>
+      </div>
+    </div>
+    <div>
+      <label for="milk">Litres of milk</label>
+      <input
+        type="number"
+        required
+        id="milk"
+        name="milk"
+        [(ngModel)]="orderData.order.milk"
+        #milk="ngModel"
+      />
+      <div *ngIf="milk.invalid && (milk.dirty || milk.touched)">
+        <div *ngIf="milk.errors.required">Milk is required.</div>
+      </div>
+    </div>
+    <div>
+      <label for="skins">Number of skins</label>
+      <input
+        type="number"
+        required
+        id="skins"
+        name="skins"
+        [(ngModel)]="orderData.order.skins"
+        #skins="ngModel"
+      />
+      <div *ngIf="skins.invalid && (skins.dirty || skins.touched)">
+        <div *ngIf="skins.errors.required">Skins is required.</div>
+      </div>
+    </div>
+    <button type="submit" (click)="placeOrder()" [disabled]="orderForm.invalid">
+      Submit
+    </button>
+    <button type="button" (click)="orderForm.resetForm({})">Reset</button>
+    <p>{{ message }}</p>
+  </form>
+</section>

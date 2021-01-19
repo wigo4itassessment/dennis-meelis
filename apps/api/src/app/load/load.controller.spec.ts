@@ -8,6 +8,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LoadController } from './load.controller';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { LabYakEntity } from '../yak/lab-yak.entity';
+import { OrderEntity } from '../order/order.entity';
 
 describe('LoadController', () => {
   let controller: LoadController;
@@ -26,6 +27,10 @@ describe('LoadController', () => {
           provide: getRepositoryToken(LabYakEntity),
           useValue: mockRepository,
         },
+        {
+          provide: getRepositoryToken(OrderEntity),
+          useValue: mockRepository,
+        },
       ],
     }).compile();
 
@@ -38,7 +43,7 @@ describe('LoadController', () => {
 
   it('should load the herd', async () => {
     await expect(controller.loadHerd(loadHerdBody)).resolves.not.toThrowError();
-    expect(mockRepository.clear).toHaveBeenCalledTimes(1);
+    expect(mockRepository.clear).toHaveBeenCalledTimes(2);
     expect(mockRepository.save).toHaveBeenCalledTimes(1);
     expect(mockRepository.save).toHaveBeenCalledWith([
       { age: 4, name: 'Betty-1', sex: 'f' },

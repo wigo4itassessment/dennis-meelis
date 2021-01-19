@@ -1,0 +1,32 @@
+$order-margin: 20%;
+
+h1 {
+  margin: 0;
+}
+
+:host {
+  display: block;
+}
+
+section.order {
+  background-color: rgba(255, 255, 255, 0.2);
+  margin-left: $order-margin;
+  margin-right: $order-margin;
+}
+
+form {
+  div {
+    margin: 1em;
+    label {
+      font-size: larger;
+      display: inline-block;
+      width: 10em;
+    }
+
+    input {
+      padding: 1em;
+      border-radius: 4px;
+      border: 2px solid black;
+    }
+  }
+}

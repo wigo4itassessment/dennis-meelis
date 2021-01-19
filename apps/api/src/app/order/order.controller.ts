@@ -46,8 +46,8 @@ export class OrderController {
     };
 
     if (
-      newOrder.order.milk > stock.milk &&
-      newOrder.order.skins > stock.skins
+      (!newOrder.order.milk || newOrder.order.milk > stock.milk) &&
+      (!newOrder.order.skins || newOrder.order.skins > stock.skins)
     ) {
       throw new NotFoundException();
     }
