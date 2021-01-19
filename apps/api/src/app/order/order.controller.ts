@@ -64,7 +64,7 @@ export class OrderController {
 
     await this.orderRepository.save(newOrder);
     if (partialOrder) {
-      console.log('206');
+      // Todo: http status 206
     }
 
     return newOrder;

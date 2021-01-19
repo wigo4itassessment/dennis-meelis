@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { LabYakEntity } from '../yak/lab-yak.entity';
+import { mockYakRepository } from '../yak/lab-yak.mocks';
 import { OrderController } from './order.controller';
 import { OrderEntity } from './order.entity';
 
@@ -10,6 +11,7 @@ describe('OrderController', () => {
 
   beforeEach(async () => {
     mockRepository = {
+      find: jest.fn(() => Promise.resolve([])),
       clear: jest.fn(() => Promise.resolve()),
       save: jest.fn(() => Promise.resolve()),
     };
@@ -23,7 +25,7 @@ describe('OrderController', () => {
         },
         {
           provide: getRepositoryToken(LabYakEntity),
-          useValue: mockRepository,
+          useValue: mockYakRepository,
         },
       ],
     }).compile();
@@ -33,5 +35,32 @@ describe('OrderController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  it('should place an order', async () => {
+    const order = await controller.placeOrder(14, {
+      customer: 'test',
+      order: { milk: 1000, skins: 3 },
+    });
+    expect(order).toEqual({
+      customer: 'test',
+      order: {
+        milk: 1000,
+        skins: 3,
+      },
+    });
+  });
+
+  it('should place a partial order', async () => {
+    const order = await controller.placeOrder(14, {
+      customer: 'test',
+      order: { milk: 1200, skins: 3 },
+    });
+    expect(order).toEqual({
+      customer: 'test',
+      order: {
+        skins: 3,
+      },
+    });
   });
 });

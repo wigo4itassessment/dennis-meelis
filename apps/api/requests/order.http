@@ -34,5 +34,5 @@ Content-Type: application/json
   }
 }
 
-### Day 13
+### Day 14
 GET {{base_url}}/yak-shop/stock/14
